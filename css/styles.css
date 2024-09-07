@@ -1,0 +1,83 @@
+.container {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    align-items: center; /* 使内容居中对齐 */
+    width: 80%;
+    margin: 0 auto;
+    background: linear-gradient(135deg, #f9f9f9, #e9ecef);
+    border-radius: 15px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+    padding: 30px;
+}
+
+textarea {
+    width: 100%;
+    height: 200px;
+    margin-bottom: 10px; /* 增加底部间距 */
+    border-radius: 12px;
+    border: 1px solid #ccc;
+    padding: 10px;
+    font-size: 16px;
+    transition: all 0.3s ease;
+}
+
+textarea:focus {
+    border-color: #007BFF;
+    outline: none;
+    box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+}
+
+.output-row {
+    display: flex;
+    flex-direction: row; /* 修改为 row，确保 chunk 和 AI 返回值左右排列 */
+    justify-content: space-between; /* 使左右两边的内容分开 */
+    width: 100%; /* 确保每个 chunk 和 AI 返回值占据足够的宽度 */
+    margin-bottom: 15px; /* 保持 chunk 的上下间距 */
+}
+
+.output {
+    width: 48%; /* 每个 textarea 占据 48% 的宽度，保持左右排列的间距 */
+    background-color: rgba(255, 255, 255, 0.9); /* 初始背景色 */
+    transition: opacity 0.5s ease, background-color 0.5s ease;
+}
+
+.output.left {
+    margin-right: 2%; /* 确保左侧和右侧内容之间有间距 */
+}
+
+.output.right {
+    margin-left: 2%;
+}
+
+.loading-spinner .spinner {
+    border: 4px solid rgba(0, 0, 0, 0.1);
+    border-left-color: #000;
+    border-radius: 50%;
+    width: 24px;
+    height: 24px;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+button {
+    width: 120px; /* 确保按钮大小一致 */
+    align-self: center; /* 居中按钮 */
+    padding: 10px;
+    border-radius: 8px;
+    border: none;
+    background-color: #007BFF;
+    color: white;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+button:hover {
+    background-color: #0056b3;
+}
