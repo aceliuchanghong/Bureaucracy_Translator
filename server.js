@@ -2,6 +2,7 @@ const express = require('express');
 const path = require('path');
 const OpenAI = require('openai');
 require('dotenv').config();
+const fs = require('fs');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -56,6 +57,16 @@ app.post('/api/get-ai-response', async (req, res) => {
         });
 
         const responseContent = completion?.choices?.[0]?.message?.content;
+        
+        // 保存到 user_post.log
+        fs.appendFile('user_post.log', responseContent + '\n', (err) => {
+            if (err) {
+                console.error('写入日志文件时出错:', err);
+            }
+        });
+
+        console.log(responseContent);
+        
         let jsonResponse;
 
         // 尝试解析为 JSON，并提取 "complexified_text"
@@ -67,7 +78,6 @@ app.post('/api/get-ai-response', async (req, res) => {
                 throw new Error('Missing complexified_text');
             }
         } catch (parseError) {
-            // 如果解析或提取失败，返回原始值
             console.error('JSON 解析错误:', parseError.message);
             res.json({response: responseContent});
         }

@@ -3,14 +3,76 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>文本处理网页</title>
+    <title>官僚主义句式转化器</title>
     <link rel="stylesheet" href="css/styles.css">
+    <link rel="icon" href="assets/shoot.png"> <!-- 添加图标 -->
 </head>
 <body>
 <div class="container">
-    <textarea id="inputText" placeholder="输入文本" class="form-control"></textarea>
-    <button id="processButton" class="btn btn-primary">处理文本</button>
+    <label for="inputText" style="text-align: left; display: block; font-size: 1.2em;">请输入或上传要转化的文本：</label>
+    <textarea id="inputText" placeholder="输入文本eg:
+- 研究和开发数字人技术，提高生成速度和实时性。
+- 推进数字人项目，优化会议纪要系统。
+- 域名申请，系统部署，文档处理。" class="form-control"></textarea>
+    <input type="file" id="fileUpload" accept=".txt,.md" class="form-control">
+    <!-- 显示默认转化结果的 div -->
+    <div class="output-row">
+        <textarea class="output left" readonly>你这个问题的底层逻辑是什么？顶层设计在哪？</textarea>
+        <textarea class="output right" readonly>你这个问题的底层逻辑是打通信息屏障，创建项目新生态，顶层设计实际是聚焦用户感知赛道，通过差异化和颗粒度达到引爆点，交付价值是在采用复用打法达成持久受益，抽离透传归因分析作为抓手为产品赋能，体验度量作为闭环的评判标准，亮点为载体，优势为链路，思考整个项目生命周期，完善逻辑考虑资源倾斜，是组合拳，最终达到平台标准化</textarea>
+    </div>
+
+    <!-- flex 容器包裹下拉框和按钮 -->
+    <div class="form-row">
+        <select id="splitOption" class="form-control">
+            <option value="split">切分文本-准确(但是较慢)</option>
+            <option value="no-split">不切分文本-速度较快</option>
+        </select>
+        <button id="processButton" class="btn btn-primary">转化为官僚主义句式</button>
+        <button id="downloadButton" class="btn btn-secondary" style="display: none;">下载文本</button>
+    </div>
 </div>
 <script type="module" src="js/script.js"></script>
+<script>
+    // 增加文件上传处理
+    document.getElementById('fileUpload').addEventListener('change', function (event) {
+        const file = event.target.files[0];
+        if (file && file.size <= 20000) { // 检查文件大小
+            const reader = new FileReader();
+            reader.onload = function (e) {
+                let fileContent = e.target.result;
+                if (fileContent.length > 20000) {
+                    fileContent = fileContent.slice(0, 20000); // 截取前 20000 字
+                }
+                document.getElementById('inputText').value = fileContent;
+            };
+            reader.readAsText(file);
+        } else {
+            alert("文件大小不能超过20KB");
+        }
+    });
+
+    // 禁用转换按钮防止重复点击
+    let isProcessing = false;
+
+    document.getElementById('processButton').addEventListener('click', function () {
+        if (isProcessing) {
+            alert('已经在执行中，请稍后...');
+            return;
+        }
+        isProcessing = true;
+        this.disabled = true;
+
+        const inputTextArea = document.getElementById('inputText');
+        let inputText = inputTextArea.value.trim();
+
+        // 如果输入为空,设置默认输入
+        if (!inputText) {
+            inputText = `- 研究和开发数字人技术，提高生成速度和实时性。
+- 推进数字人项目，优化会议纪要系统。
+- 域名申请，系统部署，文档处理。`;
+            inputTextArea.value = inputText;
+        }
+    });
+</script>
 </body>
 </html>

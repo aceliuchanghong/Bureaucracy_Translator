@@ -1,31 +1,42 @@
 .container {
     display: flex;
     flex-direction: column;
-    gap: 10px;
+    gap: 20px;
     align-items: center; /* 使内容居中对齐 */
     width: 80%;
     margin: 0 auto;
-    background: linear-gradient(135deg, #f9f9f9, #e9ecef);
-    border-radius: 15px;
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
-    padding: 30px;
+    background: linear-gradient(135deg, #f0f4f8, #d9e2ec);
+    border-radius: 20px;
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.3);
+    padding: 40px;
 }
 
 textarea {
     width: 100%;
     height: 200px;
     margin-bottom: 10px; /* 增加底部间距 */
-    border-radius: 12px;
+    border-radius: 15px;
     border: 1px solid #ccc;
-    padding: 10px;
+    padding: 15px;
     font-size: 16px;
+    background: rgba(255, 255, 255, 0.9);
     transition: all 0.3s ease;
+    box-shadow: inset 0 2px 5px rgba(0, 0, 0, 0.1);
 }
 
 textarea:focus {
-    border-color: #007BFF;
+    border-color: #00BFFF;
     outline: none;
-    box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+    box-shadow: 0 0 10px rgba(0, 191, 255, 0.8);
+}
+
+textarea, input[type="file"] {
+    width: 48%; /* 使宽度与 output 一致 */
+    margin-right: 2%; /* 增加与右边的间距 */
+}
+
+textarea#inputText {
+    width: 48%; /* 使输入框宽度与显示结果的框保持一致 */
 }
 
 .output-row {
@@ -38,8 +49,12 @@ textarea:focus {
 
 .output {
     width: 48%; /* 每个 textarea 占据 48% 的宽度，保持左右排列的间距 */
-    background-color: rgba(255, 255, 255, 0.9); /* 初始背景色 */
+    background-color: rgba(255, 255, 255, 0.95); /* 初始背景色 */
     transition: opacity 0.5s ease, background-color 0.5s ease;
+    border-radius: 10px;
+    padding: 10px;
+    border: 1px solid #ddd;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
 }
 
 .output.left {
@@ -66,18 +81,143 @@ textarea:focus {
 }
 
 button {
-    width: 120px; /* 确保按钮大小一致 */
+    width: 150px; /* 确保按钮大小一致 */
     align-self: center; /* 居中按钮 */
-    padding: 10px;
-    border-radius: 8px;
+    padding: 12px;
+    border-radius: 10px;
     border: none;
     background-color: #007BFF;
     color: white;
     font-weight: bold;
     cursor: pointer;
-    transition: background-color 0.3s;
+    transition: background-color 0.3s, transform 0.2s;
 }
 
 button:hover {
     background-color: #0056b3;
+    transform: scale(1.05);
+}
+
+/* 为下拉框添加样式 */
+select.form-control {
+    padding: 10px;
+    border-radius: 10px;
+    border: 1px solid #ccc;
+    background-color: #fff;
+    font-size: 16px;
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+    appearance: none; /* 隐藏默认箭头 */
+    background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="gray" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-chevron-down"><polyline points="6 9 12 15 18 9"/></svg>');
+    background-repeat: no-repeat;
+    background-position: right 10px center;
+    background-size: 16px;
+}
+
+/* 鼠标悬停和聚焦时的样式 */
+select.form-control:hover, select.form-control:focus {
+    border-color: #00BFFF;
+    box-shadow: 0 0 5px rgba(0, 191, 255, 0.5);
+    outline: none;
+}
+
+/* 为下拉框和按钮所在的容器添加 flex 布局 */
+.form-row {
+    display: flex;
+    justify-content: space-between; /* 确保下拉框和按钮分开排列 */
+    align-items: center; /* 垂直居中对齐 */
+    gap: 10px; /* 控制下拉框和按钮之间的间距 */
+}
+
+/* 确保下拉框和按钮在同一行时的大小一致 */
+select.form-control {
+    flex: 1; /* 使下拉框占据剩余的空间 */
+}
+
+button.btn {
+    width: auto; /* 让按钮保持自适应大小 */
+}
+
+button.btn-secondary {
+    background-color: #6c757d;
+    color: white;
+}
+
+button.btn-secondary:hover {
+    background-color: #5a6268;
+}
+
+input[type="file"] {
+    width: auto; /* 让文件选择框宽度自适应内容 */
+    max-width: 30%; /* 调整最大宽度，避免挤压其他控件 */
+    padding: 10px;
+    border-radius: 10px;
+    border: 2px solid #ccc;
+    background-color: #f8f9fa;
+    font-size: 16px;
+    color: #333;
+    cursor: pointer;
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+    text-align: center;
+}
+
+input[type="file"]:hover {
+    border-color: #00BFFF;
+    box-shadow: 0 0 5px rgba(0, 191, 255, 0.5);
+}
+
+input[type="file"]::file-selector-button {
+    background: linear-gradient(135deg, #00BFFF, #007BFF); /* 科技感渐变 */
+    color: white;
+    padding: 12px 20px;
+    border-radius: 10px;
+    border: none;
+    cursor: pointer;
+    transition: background 0.3s ease, transform 0.2s, box-shadow 0.3s;
+    box-shadow: 0 4px 20px rgba(0, 191, 255, 0.5); /* 添加发光效果 */
+    font-weight: bold;
+    font-size: 16px;
+}
+
+input[type="file"]::file-selector-button:hover {
+    background: linear-gradient(135deg, #1E90FF, #0056b3); /* 改变渐变效果 */
+    transform: scale(1.08); /* 按钮放大 */
+    box-shadow: 0 6px 30px rgba(0, 191, 255, 0.8); /* 加强发光效果 */
+}
+
+/* 使文件选择框和其他控件保持一致的大小和布局 */
+input[type="file"] {
+    width: 100%;
+    max-width: 400px; /* 限制最大宽度 */
+}
+
+/* 针对移动设备的媒体查询 */
+@media (max-width: 768px) {
+    .form-row {
+        flex-direction: column; /* 竖直排列 */
+        gap: 15px; /* 控件之间的间距 */
+    }
+
+    input[type="file"], select.form-control, button.btn {
+        width: 100%; /* 宽度填满屏幕 */
+        max-width: 100%; /* 移除宽度限制 */
+        font-size: 14px; /* 缩小字体大小 */
+    }
+
+    textarea {
+        height: 150px; /* 减小文本框高度 */
+        font-size: 14px;
+    }
+
+    button {
+        padding: 10px; /* 缩小按钮的填充空间 */
+    }
+}
+
+.btn {
+    padding: 10px 20px; /* 增加内边距 */
+    font-size: 1em; /* 调整字体大小 */
+    width: auto; /* 设置宽度为自动适应 */
+    margin: 5px; /* 增加按钮之间的间距 */
+    text-align: center; /* 文字居中 */
+    display: inline-block; /* 防止按钮撑满容器 */
 }
