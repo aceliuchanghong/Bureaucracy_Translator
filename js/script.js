@@ -4,6 +4,9 @@ document.getElementById('processButton').addEventListener('click', processText);
 document.getElementById('downloadButton').addEventListener('click', downloadText);
 
 async function processText() {
+    const processButton = document.getElementById('processButton');
+    processButton.disabled = true; // 禁用按钮
+
     const inputText = document.getElementById('inputText').value;
     const splitOption = document.getElementById('splitOption').value;
 
@@ -64,6 +67,8 @@ async function processText() {
         document.getElementById('downloadButton').style.display = 'inline-block';
         document.getElementById('downloadButton').dataset.text = processedChunks.join('\n'); // 将所有处理好的文本合并
     }
+
+    processButton.disabled = false; // 重新启用按钮
 }
 
 function createOutputTextarea(className, value) {

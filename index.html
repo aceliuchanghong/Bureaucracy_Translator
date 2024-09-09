@@ -34,27 +34,33 @@
 <script type="module" src="js/script.js"></script>
 <script>
     // 增加文件上传处理
-    document.getElementById('fileUpload').addEventListener('change', function (event) {
-        const file = event.target.files[0];
-        if (file && file.size <= 20000) { // 检查文件大小
-            const reader = new FileReader();
-            reader.onload = function (e) {
-                let fileContent = e.target.result;
-                if (fileContent.length > 20000) {
-                    fileContent = fileContent.slice(0, 20000); // 截取前 20000 字
+    fetch('/config')
+        .then(response => response.json())
+        .then(config => {
+            const maxFileSize = config.maxFileSize;
+
+            document.getElementById('fileUpload').addEventListener('change', function (event) {
+                const file = event.target.files[0];
+                if (file && file.size <= maxFileSize) { // 使用从服务器获取的文件大小限制
+                    const reader = new FileReader();
+                    reader.onload = function (e) {
+                        let fileContent = e.target.result;
+                        if (fileContent.length > maxFileSize) {
+                            fileContent = fileContent.slice(0, maxFileSize); // 截取前 maxFileSize 字
+                        }
+                        document.getElementById('inputText').value = fileContent;
+                    };
+                    reader.readAsText(file);
+                } else {
+                    alert(`文件大小不能超过${maxFileSize / 1000}KB`);
                 }
-                document.getElementById('inputText').value = fileContent;
-            };
-            reader.readAsText(file);
-        } else {
-            alert("文件大小不能超过20KB");
-        }
-    });
+            });
+        });
 
     // 禁用转换按钮防止重复点击
     let isProcessing = false;
 
-    document.getElementById('processButton').addEventListener('click', function () {
+    document.getElementById('processButton').addEventListener('click', async function () {
         if (isProcessing) {
             alert('已经在执行中，请稍后...');
             return;
@@ -72,6 +78,13 @@
 - 域名申请，系统部署，文档处理。`;
             inputTextArea.value = inputText;
         }
+
+        // 调用 processText 函数
+        await processText();
+
+        // 处理完成后重新启用按钮
+        isProcessing = false;
+        this.disabled = false;
     });
 </script>
 </body>

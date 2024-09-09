@@ -5,10 +5,14 @@ require('dotenv').config();
 const fs = require('fs');
 
 const app = express();
-const PORT = process.env.PORT || 3000;
+const model = process.env.MODEL;
+const BASE_URL = process.env.BASE_URL;
+const PORT = process.env.PORT;
+const API_KEY = process.env.DEEPSEEK_API_KEY;
+
 const openai = new OpenAI({
-    baseURL: 'https://api.deepseek.com',
-    apiKey: process.env.DEEPSEEK_API_KEY
+    baseURL: BASE_URL,
+    apiKey: API_KEY
 });
 // 设置静态文件目录
 app.use(express.static(path.join(__dirname)));
@@ -33,7 +37,7 @@ const systemPrompt = `
 
 然后将句子整合上述关键字之后的示例JSON输出:
 {
-    "original_text": "这个问题你准备怎么解决？",
+    "original_text": "<此处填写原始文本>",
     "complexified_text": "项目管理底层逻辑是打通信息屏障，创建项目新生态，顶层实际是聚焦用户感知赛道，通过差异化和颗粒度达到引爆点，交付价值是在采用复用打法达成持久受益，抽离透传归因分析作为抓手为产品赋能，体验度量作为闭环的评判标准，亮点为载体，优势为链路，思考整个项目生命周期，完善逻辑考虑资源倾斜，是组合拳，最终达到平台标准化"
 }
 `;
@@ -48,7 +52,7 @@ app.post('/api/get-ai-response', async (req, res) => {
     const {chunk} = req.body;
     try {
         const completion = await openai.chat.completions.create({
-            model: 'deepseek-chat',
+            model: model,
             messages: [
                 {role: 'system', content: systemPrompt},
                 {role: 'user', content: chunk}
@@ -57,7 +61,7 @@ app.post('/api/get-ai-response', async (req, res) => {
         });
 
         const responseContent = completion?.choices?.[0]?.message?.content;
-        
+
         // 保存到 user_post.log
         fs.appendFile('user_post.log', responseContent + '\n', (err) => {
             if (err) {
@@ -66,7 +70,7 @@ app.post('/api/get-ai-response', async (req, res) => {
         });
 
         console.log(responseContent);
-        
+
         let jsonResponse;
 
         // 尝试解析为 JSON，并提取 "complexified_text"
@@ -85,6 +89,11 @@ app.post('/api/get-ai-response', async (req, res) => {
         console.error('AI 生成错误:', error.message);
         res.status(500).json({error: 'AI 生成错误'});
     }
+});
+
+// 将文件大小限制传递给客户端
+app.get('/config', (req, res) => {
+    res.json({ maxFileSize: process.env.MAX_FILE_SIZE || 20000 });
 });
 
 app.listen(PORT, () => {
